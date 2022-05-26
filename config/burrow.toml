@@ -1,7 +1,7 @@
 [general]
 pidfile="burrow.pid"
 stdout-logfile="burrow.out"
-access-control-allow-origin="mysite.example.com"
+access-control-allow-origin=""
 
 [logging]
 filename="logs/burrow.log"
@@ -13,37 +13,37 @@ use-localtime=false
 use-compression=true
 
 [zookeeper]
-servers=[ "zkhost01.example.com:2181", "zkhost02.example.com:2181", "zkhost03.example.com:2181" ]
+servers=[ "zk1:2181", "zk2:2181", "zk3:2181" ]
 timeout=6
 root-path="/burrow"
 
-[client-profile.test]
-client-id="burrow-test"
-kafka-version="0.10.0"
+[client-profile.pam]
+client-id="pam"
+kafka-version="2.0.0"
 
-[cluster.local]
+[cluster.pam]
 class-name="kafka"
-servers=[ "kafka01.example.com:10251", "kafka02.example.com:10251", "kafka03.example.com:10251" ]
-client-profile="test"
+servers=[ "kfk1:9092", "kfk2:9092", "kfk3:9092" ]
+client-profile="pam"
 topic-refresh=120
 offset-refresh=30
 groups-reaper-refresh=0
 
-[consumer.local]
+[consumer.pam]
 class-name="kafka"
-cluster="local"
-servers=[ "kafka01.example.com:10251", "kafka02.example.com:10251", "kafka03.example.com:10251" ]
-client-profile="test"
-group-denylist="^(console-consumer-|python-kafka-consumer-|quick-).*$"
+cluster="pam"
+servers=[ "kfk1:9092", "kfk2:9092", "kfk3:9092" ]
+client-profile="pam"
+group-denylist=""
 group-allowlist=""
 
 [consumer.local_zk]
 class-name="kafka_zk"
-cluster="local"
-servers=[ "zk01.example.com:2181", "zk02.example.com:2181", "zk03.example.com:2181" ]
+cluster="pam"
+servers=[ "zk1:2181", "zk2:2181", "zk3:2181" ]
 zookeeper-path="/kafka-cluster"
 zookeeper-timeout=30
-group-denylist="^(console-consumer-|python-kafka-consumer-|quick-).*$"
+group-denylist=""
 group-allowlist=""
 
 [httpserver.default]
@@ -58,11 +58,11 @@ min-distance=1
 
 [notifier.default]
 class-name="http"
-url-open="http://someservice.example.com:1467/v1/event"
+url-open=""
 interval=60
 timeout=5
 keepalive=30
-extras={ api_key="REDACTED", app="burrow", tier="STG", fabric="mydc" }
+extras={}
 template-open="conf/default-http-post.tmpl"
 template-close="conf/default-http-delete.tmpl"
 method-close="DELETE"
